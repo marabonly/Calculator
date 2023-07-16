@@ -1,4 +1,5 @@
 ﻿|Developer|Mike Onegov|
+|---------|-----------|
 |App Name|Calculator|
 |Language|C# WPF|
 |Framework|.NET 6.0|
