@@ -5,8 +5,85 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Calculator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Calculator" Height="500" Width="300" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" ResizeMode="CanMinimize" StateChanged="Window_StateChanged" BorderThickness="1" BorderBrush="#676767" Margin="0" Padding="0">
+    
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="35" ResizeBorderThickness="8"/>
+    </WindowChrome.WindowChrome>
 
-    </Grid>
+    <Window.Resources>
+        <SolidColorBrush x:Key="BackgroundColor" Color="#E6E6E6"/>
+        <Style x:Key="StyleAllButtons" TargetType="Button">
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style x:Key="StyleButtonDigits" TargetType="Button" BasedOn="{StaticResource StyleAllButtons}">
+            <EventSetter Event="Click" Handler="ButtonDigits_Click"/>
+        </Style>
+    </Window.Resources>
+
+    <Window.Background>
+        <StaticResource ResourceKey="BackgroundColor"/>
+    </Window.Background>
+    
+    <DockPanel x:Name="RootElement" LastChildFill="True" AllowDrop="False">
+
+        <DockPanel x:Name="CustomWindowsChrome" DockPanel.Dock="Top" LastChildFill="True" Height="35" AllowDrop="False">
+            <Button x:Name="ChromeButtonClose" DockPanel.Dock="Right" Width="50" Height="35" BorderThickness="0" Background="{StaticResource BackgroundColor}" WindowChrome.IsHitTestVisibleInChrome="True" Click="ChromeButtonClose_Click">
+                <Image Source="img/chrome_close.png" Stretch="None"/>
+            </Button>
+            <Button Visibility="Collapsed" x:Name="ChromeButtonMaximize" DockPanel.Dock="Right" Width="50" Height="35" BorderThickness="0" Background="{StaticResource BackgroundColor}" WindowChrome.IsHitTestVisibleInChrome="True" Click="ChromeButtonMaximize_Click">
+                <Image x:Name="ImageButtonMaximize" Source="img/chrome_maximize_forward_disabled.png" Stretch="None"/>
+            </Button>
+            <Button x:Name="ChromeButtonMinimize" DockPanel.Dock="Right" Width="50" Height="35" BorderThickness="0" Background="{StaticResource BackgroundColor}" WindowChrome.IsHitTestVisibleInChrome="True" Click="ChromeButtonMinimize_Click">
+                <Image Source="img/chrome_minimize.png" Stretch="None"/>
+            </Button>
+            <TextBlock x:Name="ChromeTextBlock" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="14" Margin="15,0,0,0">Calculator</TextBlock>
+        </DockPanel>
+
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock x:Name="TextBlockHistory" Grid.ColumnSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Foreground="Gray" Padding="0,0,10,0"/>
+            <TextBlock x:Name="TextBlockMain" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Text="0" FontSize="45" FontWeight="Medium" Padding="0,0,10,0"/>
+
+            <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="4" Grid.Column="0" Content="7"/>
+            <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="4" Grid.Column="1" Content="8"/>
+            <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="4" Grid.Column="2" Content="9"/>
+
+            <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="5" Grid.Column="0" Content="4"/>
+            <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="5" Grid.Column="1" Content="5"/>
+            <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="5" Grid.Column="2" Content="6"/>
+
+            <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="6" Grid.Column="0" Content="1"/>
+            <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="6" Grid.Column="1" Content="2"/>
+            <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="6" Grid.Column="2" Content="3"/>
+
+            <Button Visibility="Hidden" Style="{StaticResource StyleButtonDigits}" Grid.Row="7" Grid.Column="0" Content="+/-"/>
+            <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="7" Grid.Column="1" Content="0"/>
+            <Button Visibility="Hidden" Style="{StaticResource StyleButtonDigits}" Grid.Row="7" Grid.Column="2" Content="."/>
+
+        </Grid>
+
+    </DockPanel>
 </Window>

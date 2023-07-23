@@ -5,6 +5,24 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>img\favicon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="img\chrome_maximize_forward_disabled.png" />
+    <None Remove="img\favicon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="img\favicon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="img\chrome_close.png" />
+    <Resource Include="img\chrome_maximize_backward.png" />
+    <Resource Include="img\chrome_maximize_forward.png" />
+    <Resource Include="img\chrome_minimize.png" />
+    <Resource Include="img\favicon.png" />
+  </ItemGroup>
 
 </Project>
