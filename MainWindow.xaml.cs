@@ -20,6 +20,19 @@ namespace Calculator
     /// </summary>
     public partial class MainWindow : Window
     {
+        double? firstNumber;
+        double? secondNumber;
+
+        enum Operation
+        {
+            Addition,
+            Subtraction,
+            Multiplication,
+            Division
+        }
+
+        Operation? selectedOperation;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -95,9 +108,40 @@ namespace Calculator
 
                 InputDigit(digit);
             }
+            else if ((e.Key == Key.OemPeriod) || (e.Key == Key.Decimal))
+            {
+                InputDot();
+            }
             else if (e.Key == Key.Delete)
             {
                 ClearCurrentNumber();
+            }
+            else if (e.Key == Key.Back)
+            {
+                DoBackspace();
+            }
+            else if ((e.Key == Key.Add) || (e.Key == Key.OemPlus))
+            {
+                Add();
+            }
+            else if ((e.Key == Key.OemMinus) || (e.Key == Key.Subtract))
+            {
+                if (TextBlockMain.Text.Length == 0)
+                    Negate();
+                else
+                    Subtract();
+            }
+            else if (e.Key == Key.Multiply)
+            {
+                Multiply();
+            }
+            else if (e.Key == Key.Divide)
+            {
+                Divide();
+            }
+            else if (e.Key == Key.Enter)
+            {
+                // nothing
             }
         }
 
@@ -105,12 +149,9 @@ namespace Calculator
         {
             try
             {
-                if (sender != null)
-                {
-                    string buttonContent = (sender as Button).Content.ToString();
-                    int digit = int.Parse(buttonContent);
-                    InputDigit(digit);
-                }
+                string buttonContent = (sender as Button).Content.ToString();
+                int digit = int.Parse(buttonContent);
+                InputDigit(digit);
             }
             catch { }
         }
@@ -121,13 +162,128 @@ namespace Calculator
 
             if (TextBlockMain.Text == "0")
                 TextBlockMain.Text = digit.ToString();
+            else if (TextBlockMain.Text == "-0")
+                TextBlockMain.Text = '-' + digit.ToString();
             else
                 TextBlockMain.Text += digit.ToString();
         }
 
         private void ClearCurrentNumber()
         {
-            TextBlockMain.Text = "0";
+            TextBlockMain.Text = "";
+        }
+
+        private void ButtonDot_Click(object sender, RoutedEventArgs e)
+        {
+            InputDot();
+        }
+
+        private void InputDot()
+        {
+            if (TextBlockMain.Text.Contains('.')) return;
+
+            TextBlockMain.Text += '.';
+        }
+
+        private void ButtonPlusMinus_Click(object sender, RoutedEventArgs e)
+        {
+            Negate();
+        }
+
+        private void Negate()
+        {
+            try
+            {
+                if (TextBlockMain.Text.StartsWith('-'))
+                    TextBlockMain.Text = TextBlockMain.Text.Substring(1, TextBlockMain.Text.Length - 1);
+                else
+                    TextBlockMain.Text = '-' + TextBlockMain.Text;
+            }
+            catch { }
+        }
+
+        private void ButtonClear_Click(object sender, RoutedEventArgs e)
+        {
+            ClearCurrentNumber();
+        }
+
+        private void ButtonBackspace_Click(object sender, RoutedEventArgs e)
+        {
+            DoBackspace();
+        }
+
+        private void DoBackspace()
+        {
+            if (TextBlockMain.Text.Length <= 1)
+                TextBlockMain.Text = "";
+            else
+                TextBlockMain.Text = TextBlockMain.Text.Substring(0, TextBlockMain.Text.Length - 1);
+        }
+
+        private void AcceptFirstOperand(Operation operation)
+        {
+            try
+            {
+                firstNumber = Double.Parse(TextBlockMain.Text);
+                selectedOperation = operation;
+
+                TextBlockHistory.Text = TextBlockMain.Text + GetOperator(operation);
+
+                TextBlockMain.Text = "";
+            }
+            catch { }
+        }
+
+        private char GetOperator(Operation operation)
+        {
+            switch (operation)
+            {
+                case Operation.Addition: return '+';
+                case Operation.Subtraction: return '-';
+                case Operation.Multiplication: return '×';
+                case Operation.Division: return '÷';
+            }
+            throw new Exception();
+        }
+
+        private void Add()
+        {
+            AcceptFirstOperand(Operation.Addition);
+        }
+
+        private void Subtract()
+        {
+            AcceptFirstOperand(Operation.Subtraction);
+        }
+
+        private void Multiply()
+        {
+            AcceptFirstOperand(Operation.Multiplication);
+        }
+
+        private void Divide()
+        {
+            AcceptFirstOperand(Operation.Division);
+        }
+
+        private void ButtonAdd_Click(object sender, RoutedEventArgs e)
+        {
+            Add();
+        }
+
+        private void ButtonSubtract_Click(object sender, RoutedEventArgs e)
+        {
+            Subtract();
+        }
+
+        private void ButtonMultiply_Click(object sender, RoutedEventArgs e)
+        {
+            Multiply();
+        }
+
+        private void ButtonDivide_Click(object sender, RoutedEventArgs e)
+        {
+            Divide();
         }
     }
 }

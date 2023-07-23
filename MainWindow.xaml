@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Calculator"
         mc:Ignorable="d"
         Title="Calculator" Height="500" Width="300" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown" ResizeMode="CanMinimize" StateChanged="Window_StateChanged" BorderThickness="1" BorderBrush="#676767" Margin="0" Padding="0">
@@ -12,25 +13,41 @@
     </WindowChrome.WindowChrome>
 
     <Window.Resources>
+        
+        <sys:Double x:Key="ButtonFontSize">20</sys:Double>
+        <sys:Double x:Key="ButtonImageHeight">15</sys:Double>
+        
         <SolidColorBrush x:Key="BackgroundColor" Color="#E6E6E6"/>
+        
         <Style x:Key="StyleAllButtons" TargetType="Button">
             <Setter Property="Margin" Value="1"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontSize" Value="{StaticResource ButtonFontSize}"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
-        <Style x:Key="StyleButtonDigits" TargetType="Button" BasedOn="{StaticResource StyleAllButtons}">
+
+        <Style x:Key="StyleButtonOperation" TargetType="Button" BasedOn="{StaticResource StyleAllButtons}">
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="FontWeight" Value="Light"/>
+            <Setter Property="Background" Value="#F0F0F0"/>
+        </Style>
+        
+        <Style x:Key="StyleButtonNumPad" TargetType="Button" BasedOn="{StaticResource StyleAllButtons}">
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+        
+        <Style x:Key="StyleButtonDigits" TargetType="Button" BasedOn="{StaticResource StyleButtonNumPad}">
             <EventSetter Event="Click" Handler="ButtonDigits_Click"/>
         </Style>
+        
     </Window.Resources>
-
+    
     <Window.Background>
         <StaticResource ResourceKey="BackgroundColor"/>
     </Window.Background>
     
     <DockPanel x:Name="RootElement" LastChildFill="True" AllowDrop="False">
-
+        
         <DockPanel x:Name="CustomWindowsChrome" DockPanel.Dock="Top" LastChildFill="True" Height="35" AllowDrop="False">
             <Button x:Name="ChromeButtonClose" DockPanel.Dock="Right" Width="50" Height="35" BorderThickness="0" Background="{StaticResource BackgroundColor}" WindowChrome.IsHitTestVisibleInChrome="True" Click="ChromeButtonClose_Click">
                 <Image Source="img/chrome_close.png" Stretch="None"/>
@@ -65,8 +82,20 @@
             </Grid.RowDefinitions>
 
             <TextBlock x:Name="TextBlockHistory" Grid.ColumnSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Foreground="Gray" Padding="0,0,10,0"/>
-            <TextBlock x:Name="TextBlockMain" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" Text="0" FontSize="45" FontWeight="Medium" Padding="0,0,10,0"/>
+            <TextBlock x:Name="TextBlockMain" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="45" FontWeight="Medium" Padding="0,0,10,0"/>
 
+            <Button x:Name="ButtonClearEntry" Style="{StaticResource StyleButtonOperation}" Grid.Row="2" Grid.Column="1" Content="CE" FontSize="20" />
+            <Button x:Name="ButtonClear" Style="{StaticResource StyleButtonOperation}" Grid.Row="2" Grid.Column="2" Content="C" FontSize="20" Click="ButtonClear_Click" />
+            <Button x:Name="ButtonBackspace" Style="{StaticResource StyleButtonOperation}" Grid.Row="2" Grid.Column="3" Click="ButtonBackspace_Click">
+                <Image Source="img/button_backspace.png" Height="{StaticResource ButtonImageHeight}" Stretch="Uniform"/>
+            </Button>
+
+            <Button x:Name="ButtonDivide" Style="{StaticResource StyleButtonOperation}" Grid.Row="3" Grid.Column="3" Content="÷" Click="ButtonDivide_Click"  />
+            <Button x:Name="ButtonMultiply" Style="{StaticResource StyleButtonOperation}" Grid.Row="4" Grid.Column="3" Content="×" Click="ButtonMultiply_Click" />
+            <Button x:Name="ButtonSubtract" Style="{StaticResource StyleButtonOperation}" Grid.Row="5" Grid.Column="3" Content="–" Click="ButtonSubtract_Click"  />
+            <Button x:Name="ButtonAdd" Style="{StaticResource StyleButtonOperation}" Grid.Row="6" Grid.Column="3" Content="+" Click="ButtonAdd_Click" />
+            <Button x:Name="ButtonEqual" Style="{StaticResource StyleButtonOperation}" Grid.Row="7" Grid.Column="3" Content="=" Background="#A6B3B0" />
+            
             <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="4" Grid.Column="0" Content="7"/>
             <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="4" Grid.Column="1" Content="8"/>
             <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="4" Grid.Column="2" Content="9"/>
@@ -79,9 +108,11 @@
             <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="6" Grid.Column="1" Content="2"/>
             <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="6" Grid.Column="2" Content="3"/>
 
-            <Button Visibility="Hidden" Style="{StaticResource StyleButtonDigits}" Grid.Row="7" Grid.Column="0" Content="+/-"/>
+            <Button x:Name="ButtonPlusMinus" Style="{StaticResource StyleButtonNumPad}" Grid.Row="7" Grid.Column="0" Click="ButtonPlusMinus_Click" >
+                <Image Source="img/button_plus_minus.png" Height="{StaticResource ButtonImageHeight}" Stretch="Uniform"/>
+            </Button>
             <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="7" Grid.Column="1" Content="0"/>
-            <Button Visibility="Hidden" Style="{StaticResource StyleButtonDigits}" Grid.Row="7" Grid.Column="2" Content="."/>
+            <Button x:Name="ButtonDot" Style="{StaticResource StyleButtonNumPad}" Grid.Row="7" Grid.Column="2" Content="." Click="ButtonDot_Click" />
 
         </Grid>
 
