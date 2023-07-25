@@ -20,18 +20,21 @@ namespace Calculator
     /// </summary>
     public partial class MainWindow : Window
     {
-        double? firstNumber;
-        double? secondNumber;
+        decimal firstNumber;
+        decimal secondNumber;
+
+        bool firstNumberDefined = false;
 
         enum Operation
         {
             Addition,
             Subtraction,
             Multiplication,
-            Division
+            Division,
+            Equal
         }
 
-        Operation? selectedOperation;
+        Operation selectedOperation;
 
         public MainWindow()
         {
@@ -126,7 +129,7 @@ namespace Calculator
             }
             else if ((e.Key == Key.OemMinus) || (e.Key == Key.Subtract))
             {
-                if (TextBlockMain.Text.Length == 0)
+                if ((TextBlockMain.Text.Length == 0) && (!firstNumberDefined))
                     Negate();
                 else
                     Subtract();
@@ -141,7 +144,7 @@ namespace Calculator
             }
             else if (e.Key == Key.Enter)
             {
-                // nothing
+                Equal();
             }
         }
 
@@ -202,11 +205,6 @@ namespace Calculator
             catch { }
         }
 
-        private void ButtonClear_Click(object sender, RoutedEventArgs e)
-        {
-            ClearCurrentNumber();
-        }
-
         private void ButtonBackspace_Click(object sender, RoutedEventArgs e)
         {
             DoBackspace();
@@ -220,18 +218,83 @@ namespace Calculator
                 TextBlockMain.Text = TextBlockMain.Text.Substring(0, TextBlockMain.Text.Length - 1);
         }
 
-        private void AcceptFirstOperand(Operation operation)
+        private void ProcessOperation(Operation operation)
+        {
+            if (!firstNumberDefined)
+            {
+                if (operation != Operation.Equal) AcceptFirstNumber(operation);
+            }
+            else if (decimal.TryParse(TextBlockMain.Text, out secondNumber))
+            {
+                AcceptSecondNumberAndCalculateResult(operation);
+            }
+            else
+            {
+                if (operation != Operation.Equal) ChangeOperation(operation);
+            }
+        }
+
+        private void AcceptFirstNumber(Operation operation)
         {
             try
             {
-                firstNumber = Double.Parse(TextBlockMain.Text);
+                firstNumber = decimal.Parse(TextBlockMain.Text);
                 selectedOperation = operation;
 
                 TextBlockHistory.Text = TextBlockMain.Text + GetOperator(operation);
 
                 TextBlockMain.Text = "";
+
+                firstNumberDefined = true;
             }
             catch { }
+        }
+
+        private void AcceptSecondNumberAndCalculateResult(Operation newOperation)
+        {
+            try
+            {
+                decimal result;
+
+                switch (selectedOperation)
+                {
+                    case Operation.Addition: result = firstNumber + secondNumber; break;
+                    case Operation.Subtraction: result = firstNumber - secondNumber; break;
+                    case Operation.Multiplication: result = firstNumber * secondNumber; break;
+                    case Operation.Division: result = firstNumber / secondNumber; break;
+                    default: throw new Exception();
+                }
+
+                TextBlockMain.Text = result.ToString();
+
+                if (newOperation == Operation.Equal)
+                {
+                    TextBlockHistory.Text = firstNumber.ToString() + GetOperator(selectedOperation) + GetSecondNumberFormatted() + '=';
+                    firstNumberDefined = false;
+                }
+                else
+                {
+                    firstNumber = result;
+                    selectedOperation = newOperation;
+                    TextBlockMain.Text = "";
+                    TextBlockHistory.Text = result.ToString() + GetOperator(selectedOperation);
+                }
+            }
+            catch { }
+        }
+
+        private void ChangeOperation(Operation newOperation)
+        {
+            selectedOperation = newOperation;
+            TextBlockHistory.Text = firstNumber.ToString() + GetOperator(selectedOperation);
+        }
+
+        private string GetSecondNumberFormatted()
+        {
+            if (secondNumber < 0)
+                return '(' + secondNumber.ToString() + ')';
+            else
+                return secondNumber.ToString();
         }
 
         private char GetOperator(Operation operation)
@@ -248,22 +311,27 @@ namespace Calculator
 
         private void Add()
         {
-            AcceptFirstOperand(Operation.Addition);
+            ProcessOperation(Operation.Addition);
         }
 
         private void Subtract()
         {
-            AcceptFirstOperand(Operation.Subtraction);
+            ProcessOperation(Operation.Subtraction);
         }
 
         private void Multiply()
         {
-            AcceptFirstOperand(Operation.Multiplication);
+            ProcessOperation(Operation.Multiplication);
         }
 
         private void Divide()
         {
-            AcceptFirstOperand(Operation.Division);
+            ProcessOperation(Operation.Division);
+        }
+
+        private void Equal()
+        {
+            ProcessOperation(Operation.Equal);
         }
 
         private void ButtonAdd_Click(object sender, RoutedEventArgs e)
@@ -284,6 +352,23 @@ namespace Calculator
         private void ButtonDivide_Click(object sender, RoutedEventArgs e)
         {
             Divide();
+        }
+
+        private void ButtonEqual_Click(object sender, RoutedEventArgs e)
+        {
+            Equal();
+        }
+
+        private void ButtonClearEntry_Click(object sender, RoutedEventArgs e)
+        {
+            ClearCurrentNumber();
+        }
+
+        private void ButtonClear_Click(object sender, RoutedEventArgs e)
+        {
+            ClearCurrentNumber();
+            TextBlockHistory.Text = "";
+            firstNumberDefined = false;
         }
     }
 }
