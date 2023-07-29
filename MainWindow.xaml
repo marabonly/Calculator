@@ -83,7 +83,7 @@
             </Grid.RowDefinitions>
 
             <TextBlock x:Name="TextBlockHistory" Grid.ColumnSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Foreground="Gray" Padding="0,0,10,0"/>
-            <TextBlock x:Name="TextBlockMain" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="45" FontWeight="Medium" Padding="0,0,10,0"/>
+            <TextBlock x:Name="TextBlockMain" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center"  FontSize="45" FontWeight="Medium" Padding="0,0,10,0" Text="0"/>
 
             <Button x:Name="ButtonClearEntry" Style="{StaticResource StyleButtonOperation}" Grid.Row="2" Grid.Column="1" Content="CE" FontSize="20" Click="ButtonClearEntry_Click"  />
             <Button x:Name="ButtonClear" Style="{StaticResource StyleButtonOperation}" Grid.Row="2" Grid.Column="2" Content="C" FontSize="20" Click="ButtonClear_Click" />

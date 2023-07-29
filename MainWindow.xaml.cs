@@ -24,6 +24,8 @@ namespace Calculator
         decimal secondNumber;
 
         bool firstNumberDefined = false;
+        bool textBlockMainShouldBeCleared = false;
+        bool textBlockHistoryShouldBeCleared = false;
 
         enum Operation
         {
@@ -117,7 +119,7 @@ namespace Calculator
             }
             else if (e.Key == Key.Delete)
             {
-                ClearCurrentNumber();
+                ClearTextBlockMain();
             }
             else if (e.Key == Key.Back)
             {
@@ -129,10 +131,7 @@ namespace Calculator
             }
             else if ((e.Key == Key.OemMinus) || (e.Key == Key.Subtract))
             {
-                if ((TextBlockMain.Text.Length == 0) && (!firstNumberDefined))
-                    Negate();
-                else
-                    Subtract();
+                Subtract();
             }
             else if (e.Key == Key.Multiply)
             {
@@ -159,21 +158,46 @@ namespace Calculator
             catch { }
         }
 
+        private void ClearTextBlockMainIfNeeded()
+        {
+            if (textBlockMainShouldBeCleared)
+            {
+                ClearTextBlockMain();
+                textBlockMainShouldBeCleared = false;
+            }
+        }
+
+        private void ClearTextBlockHistoryIfNeeded()
+        {
+            if (textBlockHistoryShouldBeCleared)
+            {
+                ClearTextBlockHistory();
+                firstNumberDefined = false;
+                textBlockHistoryShouldBeCleared = false;
+            }
+        }
+
         private void InputDigit(int digit)
         {
             if ((digit < 0) || (digit > 9)) return;
 
+            ClearTextBlockMainIfNeeded();
+            ClearTextBlockHistoryIfNeeded();
+
             if (TextBlockMain.Text == "0")
                 TextBlockMain.Text = digit.ToString();
-            else if (TextBlockMain.Text == "-0")
-                TextBlockMain.Text = '-' + digit.ToString();
             else
                 TextBlockMain.Text += digit.ToString();
         }
 
-        private void ClearCurrentNumber()
+        private void ClearTextBlockMain()
         {
-            TextBlockMain.Text = "";
+            TextBlockMain.Text = "0";
+        }
+
+        private void ClearTextBlockHistory()
+        {
+            TextBlockHistory.Text = "";
         }
 
         private void ButtonDot_Click(object sender, RoutedEventArgs e)
@@ -184,6 +208,9 @@ namespace Calculator
         private void InputDot()
         {
             if (TextBlockMain.Text.Contains('.')) return;
+
+            ClearTextBlockMainIfNeeded();
+            ClearTextBlockHistoryIfNeeded();
 
             TextBlockMain.Text += '.';
         }
@@ -197,10 +224,14 @@ namespace Calculator
         {
             try
             {
+                ClearTextBlockHistoryIfNeeded();
+
                 if (TextBlockMain.Text.StartsWith('-'))
                     TextBlockMain.Text = TextBlockMain.Text.Substring(1, TextBlockMain.Text.Length - 1);
-                else
+                else if (TextBlockMain.Text != "0")
                     TextBlockMain.Text = '-' + TextBlockMain.Text;
+
+                textBlockMainShouldBeCleared = false;
             }
             catch { }
         }
@@ -212,21 +243,34 @@ namespace Calculator
 
         private void DoBackspace()
         {
+            ClearTextBlockHistoryIfNeeded();
+
             if (TextBlockMain.Text.Length <= 1)
-                TextBlockMain.Text = "";
+                ClearTextBlockMain();
             else
                 TextBlockMain.Text = TextBlockMain.Text.Substring(0, TextBlockMain.Text.Length - 1);
+
+            textBlockMainShouldBeCleared = false;
         }
 
         private void ProcessOperation(Operation operation)
         {
+            if (operation != Operation.Equal)
+            {
+                ClearTextBlockHistoryIfNeeded();
+            }
+
             if (!firstNumberDefined)
             {
                 if (operation != Operation.Equal) AcceptFirstNumber(operation);
             }
-            else if (decimal.TryParse(TextBlockMain.Text, out secondNumber))
+            else if ((operation == Operation.Equal) && (textBlockMainShouldBeCleared))
             {
-                AcceptSecondNumberAndCalculateResult(operation);
+                CalculateResult(operation);
+            }
+            else if ((!textBlockMainShouldBeCleared) && (decimal.TryParse(TextBlockMain.Text, out secondNumber)))
+            {
+                CalculateResult(operation);
             }
             else
             {
@@ -243,14 +287,13 @@ namespace Calculator
 
                 TextBlockHistory.Text = TextBlockMain.Text + GetOperator(operation);
 
-                TextBlockMain.Text = "";
-
                 firstNumberDefined = true;
+                textBlockMainShouldBeCleared = true;
             }
             catch { }
         }
 
-        private void AcceptSecondNumberAndCalculateResult(Operation newOperation)
+        private void CalculateResult(Operation newOperation)
         {
             try
             {
@@ -270,15 +313,18 @@ namespace Calculator
                 if (newOperation == Operation.Equal)
                 {
                     TextBlockHistory.Text = firstNumber.ToString() + GetOperator(selectedOperation) + GetSecondNumberFormatted() + '=';
-                    firstNumberDefined = false;
+                    firstNumber = result;
+                    textBlockHistoryShouldBeCleared = true;
                 }
                 else
                 {
+                    TextBlockHistory.Text = result.ToString() + GetOperator(newOperation);
+                    TextBlockMain.Text = result.ToString();
                     firstNumber = result;
                     selectedOperation = newOperation;
-                    TextBlockMain.Text = "";
-                    TextBlockHistory.Text = result.ToString() + GetOperator(selectedOperation);
                 }
+
+                textBlockMainShouldBeCleared = true;
             }
             catch { }
         }
@@ -286,7 +332,7 @@ namespace Calculator
         private void ChangeOperation(Operation newOperation)
         {
             selectedOperation = newOperation;
-            TextBlockHistory.Text = firstNumber.ToString() + GetOperator(selectedOperation);
+            TextBlockHistory.Text = TextBlockHistory.Text.Substring(0, TextBlockHistory.Text.Length - 1) + GetOperator(selectedOperation);
         }
 
         private string GetSecondNumberFormatted()
@@ -361,14 +407,15 @@ namespace Calculator
 
         private void ButtonClearEntry_Click(object sender, RoutedEventArgs e)
         {
-            ClearCurrentNumber();
+            ClearTextBlockMain();
         }
 
         private void ButtonClear_Click(object sender, RoutedEventArgs e)
         {
-            ClearCurrentNumber();
+            ClearTextBlockMain();
             TextBlockHistory.Text = "";
             firstNumberDefined = false;
+            textBlockMainShouldBeCleared = true;
         }
     }
 }
