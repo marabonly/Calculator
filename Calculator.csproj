@@ -11,6 +11,9 @@
   <ItemGroup>
     <None Remove="img\button_backspace.png" />
     <None Remove="img\button_plus_minus.png" />
+    <None Remove="img\button_reverse.png" />
+    <None Remove="img\button_sqr.png" />
+    <None Remove="img\button_sqrt.png" />
     <None Remove="img\chrome_maximize_forward_disabled.png" />
     <None Remove="img\favicon.png" />
   </ItemGroup>
@@ -18,6 +21,9 @@
   <ItemGroup>
     <Resource Include="img\button_backspace.png" />
     <Resource Include="img\button_plus_minus.png" />
+    <Resource Include="img\button_reverse.png" />
+    <Resource Include="img\button_sqr.png" />
+    <Resource Include="img\button_sqrt.png" />
     <Resource Include="img\favicon.ico" />
   </ItemGroup>
 

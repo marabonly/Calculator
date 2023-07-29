@@ -59,6 +59,7 @@
             <Button x:Name="ChromeButtonMinimize" DockPanel.Dock="Right" Width="50" Height="35" BorderThickness="0" Background="{StaticResource BackgroundColor}" WindowChrome.IsHitTestVisibleInChrome="True" Click="ChromeButtonMinimize_Click"  Focusable="False">
                 <Image Source="img/chrome_minimize.png" Stretch="None"/>
             </Button>
+            <Image Source="img/favicon.ico" Height="15" Margin="10,0,0,0" Stretch="Uniform"/>
             <TextBlock x:Name="ChromeTextBlock" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="14" Margin="15,0,0,0">Calculator</TextBlock>
         </DockPanel>
 
@@ -91,12 +92,23 @@
                 <Image Source="img/button_backspace.png" Height="{StaticResource ButtonImageHeight}" Stretch="Uniform"/>
             </Button>
 
+            <Button x:Name="ButtonPercent" Style="{StaticResource StyleButtonOperation}" Grid.Row="2" Grid.Column="0" Content="%" FontSize="20"/>
+            <Button x:Name="ButtonReverse" Style="{StaticResource StyleButtonOperation}" Grid.Row="3" Grid.Column="0">
+                <Image Source="img/button_reverse.png" Height="{StaticResource ButtonImageHeight}" Stretch="Uniform"/>
+            </Button>
+            <Button x:Name="ButtonSqr" Style="{StaticResource StyleButtonOperation}" Grid.Row="3" Grid.Column="1">
+                <Image Source="img/button_sqr.png" Height="{StaticResource ButtonImageHeight}" Stretch="Uniform"/>
+            </Button>
+            <Button x:Name="ButtonSqrt" Style="{StaticResource StyleButtonOperation}" Grid.Row="3" Grid.Column="2">
+                <Image Source="img/button_sqrt.png" Height="{StaticResource ButtonImageHeight}" Stretch="Uniform"/>
+            </Button>
+
             <Button x:Name="ButtonDivide" Style="{StaticResource StyleButtonOperation}" Grid.Row="3" Grid.Column="3" Content="÷" Click="ButtonDivide_Click"  />
             <Button x:Name="ButtonMultiply" Style="{StaticResource StyleButtonOperation}" Grid.Row="4" Grid.Column="3" Content="×" Click="ButtonMultiply_Click" />
             <Button x:Name="ButtonSubtract" Style="{StaticResource StyleButtonOperation}" Grid.Row="5" Grid.Column="3" Content="–" Click="ButtonSubtract_Click"  />
             <Button x:Name="ButtonAdd" Style="{StaticResource StyleButtonOperation}" Grid.Row="6" Grid.Column="3" Content="+" Click="ButtonAdd_Click" />
             <Button x:Name="ButtonEqual" Style="{StaticResource StyleButtonOperation}" Grid.Row="7" Grid.Column="3" Content="=" Background="#A6B3B0" Click="ButtonEqual_Click"  />
-            
+
             <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="4" Grid.Column="0" Content="7"/>
             <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="4" Grid.Column="1" Content="8"/>
             <Button Style="{StaticResource StyleButtonDigits}" Grid.Row="4" Grid.Column="2" Content="9"/>
