@@ -63,7 +63,7 @@
             <TextBlock x:Name="ChromeTextBlock" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="14" Margin="15,0,0,0">Calculator</TextBlock>
         </DockPanel>
 
-        <Grid>
+        <Grid x:Name="MainGrid">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -83,8 +83,8 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBlock x:Name="TextBlockHistory" Grid.ColumnSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Foreground="Gray" Padding="0,0,10,0"/>
-            <TextBlock x:Name="TextBlockMain" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center"  FontSize="45" FontWeight="Medium" Padding="0,0,10,0" Text="0"/>
+            <TextBlock x:Name="TextBlockHistory" Grid.ColumnSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Foreground="Gray" Margin="0,0,10,0" SizeChanged="TextBlock_SizeChanged"/>
+            <TextBlock x:Name="TextBlockMain" Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="45" FontWeight="Medium" Margin="0,0,10,0" Text="0" SizeChanged="TextBlock_SizeChanged"/>
 
             <Button x:Name="ButtonClearEntry" Style="{StaticResource StyleButtonOperation}" Grid.Row="2" Grid.Column="1" Content="CE" FontSize="20" Click="ButtonClearEntry_Click"  />
             <Button x:Name="ButtonClear" Style="{StaticResource StyleButtonOperation}" Grid.Row="2" Grid.Column="2" Content="C" FontSize="20" Click="ButtonClear_Click" />
@@ -92,14 +92,14 @@
                 <Image Source="img/button_backspace.png" Height="{StaticResource ButtonImageHeight}" Stretch="Uniform"/>
             </Button>
 
-            <Button x:Name="ButtonPercent" Style="{StaticResource StyleButtonOperation}" Grid.Row="2" Grid.Column="0" Content="%" FontSize="20"/>
-            <Button x:Name="ButtonReverse" Style="{StaticResource StyleButtonOperation}" Grid.Row="3" Grid.Column="0">
+            <Button x:Name="ButtonPercent" Style="{StaticResource StyleButtonOperation}" Grid.Row="2" Grid.Column="0" Content="%" FontSize="20" Click="ButtonPercent_Click"/>
+            <Button x:Name="ButtonReverse" Style="{StaticResource StyleButtonOperation}" Grid.Row="3" Grid.Column="0" Click="ButtonReverse_Click">
                 <Image Source="img/button_reverse.png" Height="{StaticResource ButtonImageHeight}" Stretch="Uniform"/>
             </Button>
-            <Button x:Name="ButtonSqr" Style="{StaticResource StyleButtonOperation}" Grid.Row="3" Grid.Column="1">
+            <Button x:Name="ButtonSqr" Style="{StaticResource StyleButtonOperation}" Grid.Row="3" Grid.Column="1" Click="ButtonSqr_Click">
                 <Image Source="img/button_sqr.png" Height="{StaticResource ButtonImageHeight}" Stretch="Uniform"/>
             </Button>
-            <Button x:Name="ButtonSqrt" Style="{StaticResource StyleButtonOperation}" Grid.Row="3" Grid.Column="2">
+            <Button x:Name="ButtonSqrt" Style="{StaticResource StyleButtonOperation}" Grid.Row="3" Grid.Column="2" Click="ButtonSqrt_Click">
                 <Image Source="img/button_sqrt.png" Height="{StaticResource ButtonImageHeight}" Stretch="Uniform"/>
             </Button>
 
